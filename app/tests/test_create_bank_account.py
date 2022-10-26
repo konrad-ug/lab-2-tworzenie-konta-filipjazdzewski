@@ -9,6 +9,9 @@ class TestCreateBankAccount(unittest.TestCase):
 
     incorrect_pesel = "12345"
 
+    valid_coupon = "PROM_XYZ"
+    invalid_coupon = "PROMXYZ"
+
     def test_tworzenie_konta(self):
         pierwsze_konto = Konto(self.correct_pesel, self.name, self.surname)
         self.assertEqual(pierwsze_konto.pesel, self.correct_pesel, "Pesel nie został zapisany!")
@@ -21,3 +24,10 @@ class TestCreateBankAccount(unittest.TestCase):
         self.assertEqual(drugie_konto.pesel, "Niepoprawny pesel!",
             "Pesel nie posiada wartości 'Niepoprawny pesel', przy podaniu niepoprawnego peselu!")
             
+    def test_saldo_with_valid_coupon(self):
+        konto_z_valid_coupon = Konto(self.correct_pesel, self.name, self.surname, self.valid_coupon)
+        self.assertEqual(konto_z_valid_coupon.saldo, 50, "Wartość salda nie równa się 50, mimo użycia poprawnego kuponu!")
+
+    def test_saldo_with_invalid_coupon(self):
+        konto_z_invalid_coupon = Konto(self.correct_pesel, self.name, self.surname, self.invalid_coupon)
+        self.assertEqual(konto_z_invalid_coupon.saldo, 0, "Wartość salda nie równa się 0, mimo użycia niepoprawnego kuponu lub braku kuponu!")
