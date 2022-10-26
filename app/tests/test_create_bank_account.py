@@ -3,11 +3,12 @@ import unittest
 from ..Konto import Konto
 
 class TestCreateBankAccount(unittest.TestCase):
-    correct_pesel = "99111900536"
     name = "Dariusz"
     surname = "Januszewski"
 
+    correct_pesel = "99111900536"
     incorrect_pesel = "12345"
+    pesel_before_1961 = "57052603699"
 
     valid_coupon = "PROM_XYZ"
     invalid_coupon = "PROMXYZ"
@@ -31,3 +32,7 @@ class TestCreateBankAccount(unittest.TestCase):
     def test_saldo_with_invalid_coupon(self):
         konto_z_invalid_coupon = Konto(self.correct_pesel, self.name, self.surname, self.invalid_coupon)
         self.assertEqual(konto_z_invalid_coupon.saldo, 0, "Wartość salda nie równa się 0, mimo użycia niepoprawnego kuponu lub braku kuponu!")
+
+    def test_if_coupon_is_valid_for_people_born_after_1960(self):
+        konto_staruszka = Konto(self.pesel_before_1961, self.name, self.surname, self.valid_coupon)
+        self.assertEqual(konto_staruszka.saldo, 0, "Kupon nie jest ważny dla osób urodzonych po 1960 roku!")
