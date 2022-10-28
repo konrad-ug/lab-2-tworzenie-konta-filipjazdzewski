@@ -41,3 +41,28 @@ class TestCreateBankAccount(unittest.TestCase):
     def test_if_coupon_is_valid_for_people_born_after_2000(self):
         konto_gen_z = Konto(self.pesel_after_2000, self.name, self.surname, self.valid_coupon)
         self.assertEqual(konto_gen_z.saldo, 50, "Kupon powinien być ważny dla ludzi po 1960 roku!")
+
+
+class TestBookingMoneyTransfers(unittest.TestCase):
+    name = "Dariusz"
+    surname = "Januszewski"
+    pesel = "99111900536"
+    valid_coupon = "PROM_ABC"
+
+    def test_if_valid_transfer_changes_saldo(self):
+        pierwsze_konto = Konto(self.pesel, self.name, self.surname, self.valid_coupon)
+        pierwsze_konto.TransferMoney(30)
+        self.assertEqual(pierwsze_konto.saldo, 20, 
+            "Saldo powinno wynosić 20 po wysłaniu 30!")
+
+    def test_if_valid_transfer_changes_saldo(self):
+        drugie_konto = Konto(self.pesel, self.name, self.surname, self.valid_coupon)
+        drugie_konto.TransferMoney(200)
+        self.assertEqual(drugie_konto.saldo, 50, 
+            "Wartość salda powinna pozostać ta sama (50) po próbie wysłania 80, ponieważ środki są nie wystarczające!")
+
+    def test_if_receive_money_changes_saldo(self):
+        trzecie_konto = Konto(self.pesel, self.name, self.surname, self.valid_coupon)
+        trzecie_konto.ReceiveMoney(1000)
+        self.assertEqual(trzecie_konto.saldo, 1050,
+            "Wartość salda powinna wynosić 1050 po przyjęciu 1000!")

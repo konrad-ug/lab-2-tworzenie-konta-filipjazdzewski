@@ -17,3 +17,11 @@ class Konto:
             self.saldo = 50
         else:
             self.saldo = 0
+
+    def TransferMoney(self, kwotaDoWyslania):
+        if (self.saldo > kwotaDoWyslania):
+            self.saldo -= kwotaDoWyslania
+
+    def ReceiveMoney(self, kwotaDoOtrzymania):
+        self.saldo += kwotaDoOtrzymania
+        
