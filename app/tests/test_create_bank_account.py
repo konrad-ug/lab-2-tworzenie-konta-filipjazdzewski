@@ -9,6 +9,7 @@ class TestCreateBankAccount(unittest.TestCase):
     correct_pesel = "99111900536"
     incorrect_pesel = "12345"
     pesel_before_1961 = "57052603699"
+    pesel_after_2000 = "02222607061"
 
     valid_coupon = "PROM_XYZ"
     invalid_coupon = "PROMXYZ"
@@ -36,3 +37,7 @@ class TestCreateBankAccount(unittest.TestCase):
     def test_if_coupon_is_valid_for_people_born_after_1960(self):
         konto_staruszka = Konto(self.pesel_before_1961, self.name, self.surname, self.valid_coupon)
         self.assertEqual(konto_staruszka.saldo, 0, "Kupon nie jest ważny dla osób urodzonych po 1960 roku!")
+
+    def test_if_coupon_is_valid_for_people_born_after_2000(self):
+        konto_gen_z = Konto(self.pesel_after_2000, self.name, self.surname, self.valid_coupon)
+        self.assertEqual(konto_gen_z.saldo, 50, "Kupon powinien być ważny dla ludzi po 1960 roku!")
