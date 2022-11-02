@@ -55,11 +55,11 @@ class TestBookingMoneyTransfers(unittest.TestCase):
         self.assertEqual(pierwsze_konto.saldo, 20, 
             "Saldo powinno wynosić 20 po wysłaniu 30!")
 
-    def test_if_valid_transfer_changes_saldo(self):
+    def test_if_invalid_transfer_changes_saldo(self):
         drugie_konto = Konto(self.pesel, self.name, self.surname, self.valid_coupon)
         drugie_konto.TransferMoney(200)
         self.assertEqual(drugie_konto.saldo, 50, 
-            "Wartość salda powinna pozostać ta sama (50) po próbie wysłania 80, ponieważ środki są nie wystarczające!")
+            "Wartość salda powinna pozostać ta sama (50) po próbie wysłania wyższej wartości niż posiadana!")
 
     def test_if_receive_money_changes_saldo(self):
         trzecie_konto = Konto(self.pesel, self.name, self.surname, self.valid_coupon)
