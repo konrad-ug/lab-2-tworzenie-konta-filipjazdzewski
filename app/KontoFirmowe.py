@@ -8,3 +8,7 @@ class KontoFirmowe(Konto):
 
     def NipValidation(self, nip):
         self.nip = nip if len(nip) == 10 else 'Niepoprawny NIP!'
+
+    def ExpressTransfer(self, amount):
+        if (self.saldo - amount - 5 >= -5):
+            self.saldo -= amount + 5

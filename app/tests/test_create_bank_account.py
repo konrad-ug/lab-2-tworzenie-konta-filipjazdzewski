@@ -50,6 +50,9 @@ class TestBookingMoneyTransfers(unittest.TestCase):
     pesel = "99111900536"
     valid_coupon = "PROM_ABC"
 
+    nazwa = "Dunder Mifflin Paper Company"
+    valid_nip = "8858910020"
+
     def test_if_valid_transfer_changes_saldo(self):
         pierwsze_konto = Konto(self.pesel, self.name, self.surname, self.valid_coupon)
         pierwsze_konto.TransferMoney(30)
@@ -67,6 +70,34 @@ class TestBookingMoneyTransfers(unittest.TestCase):
         trzecie_konto.ReceiveMoney(1000)
         self.assertEqual(trzecie_konto.saldo, 1050,
             "Wartość salda powinna wynosić 1050 po przyjęciu 1000!")
+
+    # Valid ExpressTransfer for normal bank account
+    def test_saldo_of_normal_account_after_valid_express_transfer(self):
+        first_normal_acc = Konto(self.pesel, self.name, self.surname)
+        first_normal_acc.saldo = 100
+        first_normal_acc.ExpressTransfer(100)
+        self.assertEqual(first_normal_acc.saldo, -1, "Wartość salda nie wynosi -1 po poprawnym przelewie ekspresowym!")
+
+    # Invalid ExpressTransfer for normal bank account
+    def test_saldo_of_normal_account_after_invalid_express_transfer(self):
+        second_normal_acc = Konto(self.pesel, self.name, self.surname)
+        second_normal_acc.saldo = 100
+        second_normal_acc.ExpressTransfer(101)
+        self.assertEqual(second_normal_acc.saldo, 100, "Wartość salda nie pozostala 100 po niepoprawnym przelewie ekspresowym!")
+
+    # Valid ExpressTransfer for company bank account
+    def test_saldo_of_company_account_after_valid_express_transfer(self):
+        first_company_acc = KontoFirmowe(self.valid_nip, self.nazwa)
+        first_company_acc.saldo = 100
+        first_company_acc.ExpressTransfer(100)
+        self.assertEqual(first_company_acc.saldo, -5, "Wartość salda nie wynosi -5 po poprawnym przelewie ekspresowym!")
+
+    # Invalid ExpressTransfer for company bank account
+    def test_saldo_of_company_account_after_invalid_express_transfer(self):
+        second_company_acc = KontoFirmowe(self.valid_nip, self.nazwa)
+        second_company_acc.saldo = 100
+        second_company_acc.ExpressTransfer(101)
+        self.assertEqual(second_company_acc.saldo, 100, "Wartość salda nie wynosi 100 po niepoprawnym przelewie ekspresowym!")
 
 class TestCreateCompanyBankAccount(unittest.TestCase):
     nazwa = "Dunder Mifflin Paper Company"

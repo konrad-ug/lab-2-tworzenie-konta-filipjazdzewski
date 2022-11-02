@@ -22,4 +22,8 @@ class Konto:
 
     def ReceiveMoney(self, kwotaDoOtrzymania):
         self.saldo += kwotaDoOtrzymania
+
+    def ExpressTransfer(self, amount):
+        if (self.saldo - amount - 1 >= -1):
+            self.saldo -= amount + 1
         
