@@ -1,5 +1,3 @@
-from tkinter.filedialog import SaveFileDialog
-
 class Konto:
     def __init__(self, pesel, imie, nazwisko, coupon=None):
         self.imie = imie

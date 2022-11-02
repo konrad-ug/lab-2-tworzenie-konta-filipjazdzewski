@@ -1,6 +1,7 @@
 import unittest
 
 from ..Konto import Konto
+from ..KontoFirmowe import KontoFirmowe
 
 class TestCreateBankAccount(unittest.TestCase):
     name = "Dariusz"
@@ -24,7 +25,7 @@ class TestCreateBankAccount(unittest.TestCase):
     def test_pesel_lenght_is_not_correct(self):
         drugie_konto = Konto(self.incorrect_pesel, self.name, self.surname)
         self.assertEqual(drugie_konto.pesel, "Niepoprawny pesel!",
-            "Pesel nie posiada wartości 'Niepoprawny pesel', przy podaniu niepoprawnego peselu!")
+            "Pesel nie posiada wartości 'Niepoprawny pesel!', przy podaniu niepoprawnego peselu!")
             
     def test_saldo_with_valid_coupon(self):
         konto_z_valid_coupon = Konto(self.correct_pesel, self.name, self.surname, self.valid_coupon)
@@ -66,3 +67,19 @@ class TestBookingMoneyTransfers(unittest.TestCase):
         trzecie_konto.ReceiveMoney(1000)
         self.assertEqual(trzecie_konto.saldo, 1050,
             "Wartość salda powinna wynosić 1050 po przyjęciu 1000!")
+
+class TestCreateCompanyBankAccount(unittest.TestCase):
+    nazwa = "Dunder Mifflin Paper Company"
+    valid_nip = "8858910020"
+    invalid_nip = "211337"
+
+    def test_create_company_account(self):
+        first_account = KontoFirmowe(self.valid_nip, self.nazwa)
+        self.assertEqual(first_account.nazwa, self.nazwa, "Nazwa firmy nie została zapisana!")
+        self.assertEqual(first_account.nip, self.valid_nip, "Nip nie został zapisany!")
+        self.assertEqual(first_account.saldo, 0, "Wartość salda nie wynosi 0!")
+
+    def test_nip_length_is_not_correct(self):
+        second_account = KontoFirmowe(self.invalid_nip, self.nazwa)
+        self.assertEqual(second_account.nip, "Niepoprawny NIP!", 
+            "Nip nie posiada wartości 'Niepoprawny NIP!', przy podaniu niepoprawnego nipu!")
