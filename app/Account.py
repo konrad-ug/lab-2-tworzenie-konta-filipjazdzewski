@@ -2,6 +2,7 @@ class Account:
     def __init__(self, pesel, name, surname, coupon=None):
         self.name = name
         self.surname = surname
+        self.expressTransferCost = 1
         self.PeselValidation(pesel)
         self.CouponValidation(coupon)
         
@@ -25,5 +26,5 @@ class Account:
 
     def ExpressTransfer(self, amount):
         if (self.balance - amount >= 0):
-            self.balance -= amount + 1
+            self.balance -= amount + self.expressTransferCost
         
