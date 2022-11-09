@@ -5,6 +5,7 @@ class CompanyAccount(Account):
         self.companyName = companyName
         self.balance = 0
         self.expressTransferCost = 5
+        self.history = []
         self.NipValidation(nip)
 
     def NipValidation(self, nip):
