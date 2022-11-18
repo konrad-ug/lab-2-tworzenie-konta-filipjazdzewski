@@ -57,3 +57,37 @@ class TestBookingMoneyTransfers(unittest.TestCase):
         second_company_acc.balance = 100
         second_company_acc.ExpressTransfer(101)
         self.assertEqual(second_company_acc.balance, 100, "Wartość salda nie wynosi 100 po niepoprawnym przelewie ekspresowym!")
+
+    # Testing history
+    def test_normal_account_history_after_valid_transfers(self):
+        normal_account = Account(self.pesel, self.name, self.surname)
+        normal_account.ReceiveMoney(500)
+        normal_account.TransferMoney(200)
+        normal_account.ExpressTransfer(100)
+        self.assertEqual(normal_account.history, [500, -200, -1, -100],
+            "Transfery nie dodają się poprawnie do historii transferów!")
+
+    def test_normal_account_history_after_invalid_transfers(self):
+        normal_account = Account(self.pesel, self.name, self.surname)
+        normal_account.ReceiveMoney(500)
+        normal_account.TransferMoney(200)
+        normal_account.ExpressTransfer(400)
+        self.assertEqual(normal_account.history, [500, -200],
+            "Transfery nie dodają się poprawnie do historii transferów!")
+
+    def test_company_account_history_after_valid_transfers(self):
+        company_account = CompanyAccount(self.valid_nip, self.companyName)
+        company_account.ReceiveMoney(500)
+        company_account.TransferMoney(200)
+        company_account.ExpressTransfer(100)
+        self.assertEqual(company_account.history, [500, -200, -5, -100],
+            "Transfery nie dodają się poprawnie do historii transferów!")
+
+    def test_company_account_history_after_invalid_transfers(self):
+        company_account = CompanyAccount(self.valid_nip, self.companyName)
+        company_account.ReceiveMoney(500)
+        company_account.TransferMoney(200)
+        company_account.ExpressTransfer(400)
+        self.assertEqual(company_account.history, [500, -200],
+            "Transfery nie dodają się poprawnie do historii transferów!")
+
