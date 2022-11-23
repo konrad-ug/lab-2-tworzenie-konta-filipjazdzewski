@@ -1,4 +1,5 @@
 import unittest
+from parameterized import parameterized
 
 from ..Account import Account
 
@@ -10,26 +11,17 @@ class TestTakingOutALoan(unittest.TestCase):
     def setUp(self):
         self.account = Account(self.pesel, self.surname, self.name)
 
-    def test_5_incoming_transfers(self):
-        self.account.history = [-100, 100, 100, 100, 600]
-        is_granted = self.account.TakeOutALoan(500)
-        self.assertTrue(is_granted)
-        self.assertEqual(self.account.balance, 500)
+    @parameterized.expand([
+        ([-100, 100, 100, 100, 600], 500, True, 500), 
+        ([-10000, 100, 100, 100, 600], 300, False, 0),
+        ([10000, -100, 0, 100, 600], 300, False, 0),
+        ([10000, -100, -100, 100, 600], 300, False, 0),
+        ([300, 100, 600], 300, False, 0),
+        ([], 10, False, 0),
+    ])
 
-    def test_5_incoming_transfers_too_little_sum(self):
-        self.account.history = [-10000, 100, 100, 100, 600]
-        is_granted = self.account.TakeOutALoan(500)
-        self.assertFalse(is_granted)
-        self.assertEqual(self.account.balance, 0)
-
-    def test_last_3_transfers_not_all_positive(self):
-        self.account.history = [10000, -100, 0, 100, 600]
-        is_granted = self.account.TakeOutALoan(500)
-        self.assertFalse(is_granted)
-        self.assertEqual(self.account.balance, 0)
-
-    def test_history_length_below_5(self):
-        self.account.history = [100, 300, 100, 600]
-        is_granted = self.account.TakeOutALoan(500)
-        self.assertFalse(is_granted)
-        self.assertEqual(self.account.balance, 0)
+    def test_take_out_a_loan(self, history, amount, expected_result, expected_balance):
+        self.account.history = history
+        is_granted = self.account.TakeOutALoan(amount)
+        self.assertEqual(is_granted, expected_result)
+        self.assertEqual(self.account.balance, expected_balance, "The loan has not been granted properly!")
