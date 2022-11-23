@@ -32,4 +32,12 @@ class Account:
             self.balance -= amount + self.expressTransferCost
             self.history.append(-self.expressTransferCost)
             self.history.append(-amount)
+
+    def TakeOutALoan(self, amount):
+        if len(self.history) < 5:
+            return False
+        if self.history[-3] > 0 and self.history[-2] > 0 and self.history[-1] > 0 and sum(self.history[-5:]) > amount:
+            self.balance += amount
+            return True
+        return False
         
