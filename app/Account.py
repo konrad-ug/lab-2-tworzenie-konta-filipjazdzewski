@@ -32,4 +32,24 @@ class Account:
             self.balance -= amount + self.expressTransferCost
             self.history.append(-self.expressTransferCost)
             self.history.append(-amount)
+
+    def TakeOutALoan(self, amount):
+        if self.check_the_terms_of_taking_out_a_loan_are_met(amount):
+            self.balance += amount
+            return True
+        return False
+
+    def history_length_is_greater_or_equal_5(self):
+        return True if len(self.history) >= 5 else False
+
+    def last_3_transfers_were_incoming(self):
+        return True if self.history[-3] > 0 and self.history[-2] > 0 and self.history[-1] > 0 else False
+
+    def sum_of_last_5_transfers_is_greater_than_loan_amount(self, amount):
+        return True if sum(self.history[-5:]) > amount else False
+
+    def check_the_terms_of_taking_out_a_loan_are_met(self, amount):
+        if self.history_length_is_greater_or_equal_5() and self.last_3_transfers_were_incoming() and self.sum_of_last_5_transfers_is_greater_than_loan_amount(amount):
+            return True
+        return False
         
